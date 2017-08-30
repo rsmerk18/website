@@ -1,0 +1,25 @@
+---
+title: "SQL"
+output: html_document
+---
+
+# This is a level one header
+## This is a level two header
+### This is a level three header
+
+For paraghraphs you dont need anything special.
+
+* Item 1
+* Item 2
+* Item 3
+* Item 4
+
+Column 1 | Column 2
+------|-----
+Phillies | National
+Yankees | American
+Cubs | National
+
+
+
+<img src="Pirates.jpg" width="300" />
