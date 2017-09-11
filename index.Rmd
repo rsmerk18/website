@@ -12,12 +12,40 @@ library(Lahman)
 library(sqldf)
 ```
 
-Let's take a look at an example. Suppose we want to see the homerun totals for the 1927 Yankees. We could write:
+Let's take a look at some examples. 
+
+Suppose we want to see the homerun totals for the 1927 Yankees. We could write:
 
 ```{r}
 query<-"select playerID,teamID,yearID,HR from Batting
 where teamID='NYA' and yearID=1927"
 sqldf(query)
+```
+ Suppose we want to find all insances of Phillies in the 1970s hitting more than 30 homeruns.
+
+```{r}
+query<-"select playerID,teamID,yearID,HR from Batting
+where teamID='PHI' and HR>30 and yearID>=1970 and yearID<1980"
+
+sqldf(query)
+```
+
+SUppose we want to find all instances of Yankees hitting 40 homeruns or more.
+
+```{r}
+query<-"select playerID,teamID,yearID,HR from Batting where teamID='NYA' and HR>=40"
+
+sqldf(query)
+```
+
+Suppose we want to find all the instances where a player had more than 40 homeruns but less than 60 strikeouts.
+
+```{r}
+query<-"select playerID,teamID,yearID,HR,SO from Batting
+where HR>40 and SO<60"
+
+sqldf(query)
+
 ```
 
 ### Order By
@@ -28,6 +56,18 @@ With SQL we can also order the rows in the output. For example; suppose we want 
 query<-"select playerID,yearID,teamID,HR from Batting 
 where HR>50
 order by HR desc"
+
+sqldf(query)
+```
+
+### Aggregation
+With SQL we can squash chunks of data together to get things such as sumations,averages,maximuns, and minimums. For example; Suppose we want to find what players have the highest average per season Hoomerun totals, Listing only those with averages greater than 30.
+
+```{r}
+query<-" select playerID, avg(HR) from Batting
+group by playerID
+having avg(HR)>30
+order by avg(HR) desc"
 
 sqldf(query)
 ```
