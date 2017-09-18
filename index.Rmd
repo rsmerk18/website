@@ -72,3 +72,76 @@ order by avg(HR) desc"
 sqldf(query)
 ```
 
+### Joins
+With an SQL we can combine data from multiple different lists using joins.  Suppose we want to find Babe Ruths Homeruns each season but rather than see his playerID we want to see his name.
+
+```{r}
+query<-"select nameFirst, nameLast, teamID, yearID, HR from Batting
+inner join Master
+on Batting.playerID=Master.playerID
+where Batting.playerID='ruthba01'"
+
+sqldf(query)
+```
+
+Suppose we would like to find all people who hit more than 50 homeruns and be able to see their name rather than their playerID.
+
+```{r}
+query<-"select nameFirst, nameLast,teamID,yearID,HR
+from Batting inner join Master 
+on Batting.playerID=Master.playerID
+where HR>50
+order by HR desc"
+
+sqldf(query)
+```
+
+Suppose we want to see the team name rather than the teamId for all of the years Babe Ruth played.
+
+```{r}
+query<-"select playerID,name, Batting.yearID,Batting.HR
+from Batting inner join Teams on Batting.teamID=Teams.teamId
+and Batting.yearID=Teams.yearID
+where playerID='ruthba01'"
+
+sqldf(query)
+```
+
+Suppose we want to see both the Team name and Babe Ruths name rather than teamID and playerID.
+
+```{r}
+query<-"select nameFirst,nameLast,name,Batting.yearID,Batting.teamID 
+from (Batting inner join Master
+on Batting.playerID=Master.playerID) inner join Teams
+on Batting.teamID=Teams.teamID and Batting.yearId=Teams.yearID
+where Batting.playerID='ruthba01'"
+
+sqldf(query)
+```
+
+Suppose we want to see the first and last name of all players who have hit more than 600 Homeruns in their career.
+
+```{r}
+query<-"select nameFirst, nameLast, sum(HR) from Batting
+inner join Master on Batting.playerID=Master.playerID
+group by Batting.playerID
+having sum(HR)>=600
+order by sum(HR) desc"
+
+sqldf(query)
+```
+
+Suppose we want to see the first and last name for all players with the first name Bob with an average salary over $1000000.
+
+```{r}
+query<-"select nameFirst, nameLast, avg(salary) from Salaries
+inner join Master on Salaries.playerID=Master.playerID
+where nameFirst='Bob'
+group by Salaries.playerID
+having avg(salary)>1000000
+order by avg(salary) desc"
+
+sqldf(query)
+
+```
+
